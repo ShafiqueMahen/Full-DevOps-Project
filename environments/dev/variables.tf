@@ -35,3 +35,14 @@ variable "vpc_private_subnets" {
   type = list(string)
   default = ["10.0.1.0/24", "10.0.2.0/24"]
 }
+
+# Web Specific Variables
+variable "instance_type" {
+  description = "Desired instance type for Web EC2 instance"
+  default = "t2.micro"
+}
+
+variable "key_name" {
+    description = "SSH Key Name"
+    default = "TF-nginx-ec2-key"
+}
