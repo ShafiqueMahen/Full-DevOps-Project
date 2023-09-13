@@ -10,3 +10,6 @@
 # Keys
 private-keys/
 private-keys/*
+
+# Go files
+go.*
