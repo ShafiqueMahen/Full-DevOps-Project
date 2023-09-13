@@ -1,0 +1,37 @@
+# Workflow to Terratest Infrastructure for each Environment
+
+  name: Terraform infrastructure w/ Terratest
+
+  on:
+    push:
+      branches:
+      - main
+    pull_request:
+      branches:
+      - main
+  
+  env:
+    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    AWS_REGION: eu-west-2
+
+  jobs:
+    terraform:
+      name: Terratests
+      runs-on: ubuntu-latest
+      steps:
+        - name: Testing Dev Environment
+          run: go test -v dev_test.go
+          working-directory: tests
+
+        - name: Testing Prod Environment
+          run: go test -v prod_test.go
+          working-directory: tests
+
+        - name: Testing Staging Environment
+          run: go test -v staging_test.go
+          working-directory: tests
+
+
+
+
