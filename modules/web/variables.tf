@@ -7,17 +7,20 @@ variable "environment" {
 # Variables dependent on VPC module
 variable "vpc_id" {
     description = "The VPC ID"
+    type = string
     default = ""
 }
 
 variable "public_subnet_ids" {
     description = "The IDs of Public Subnets in VPC"
-    default = ""
+    type = list(string)
+    default = [""]
 }
 
 variable "private_subnet_ids" {
     description = "The IDs of Private Subnets in VPC"
-    default = ""
+    type = list(string)
+    default = [""]
 }
 
 # Web specific input variables

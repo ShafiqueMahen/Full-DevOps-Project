@@ -1,10 +1,17 @@
-# General variables
+# Global Input Variables
 variable "environment" {
     description = "Environment"
     type = string
-    default = "Dev"
+    default = "Stag"
 }
 
+variable "aws_region" {
+  description = "Region in which AWS Resources to be created"
+  type = string
+  default = "us-east-1"  
+}
+
+# VPC Specific Variables
 variable "vpc_cidr_block" {
     description = "The CIDR block used by the VPC"
     type = string
@@ -27,4 +34,15 @@ variable "vpc_private_subnets" {
   description = "VPC Private Subnets"
   type = list(string)
   default = ["10.0.1.0/24", "10.0.2.0/24"]
+}
+
+# Web Specific Variables
+variable "instance_type" {
+  description = "Desired instance type for Web EC2 instance"
+  default = "t2.micro"
+}
+
+variable "key_name" {
+    description = "SSH Key Name"
+    default = "TF-nginx-ec2-key"
 }

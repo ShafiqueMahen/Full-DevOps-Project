@@ -13,7 +13,7 @@ resource "aws_instance" "web" {
     #!/bin/bash
     sudo yum update -y
     sudo amazon-linux-extras install -y nginx1
-    sudo echo "Terraform Nginx Website" > /usr/share/nginx/html/index.html
+    sudo echo "Welcome to your Terraform Nginx Website hosted on EC2 instance - Environment: ${var.environment}" > /usr/share/nginx/html/index.html
     sudo curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | sudo tee -a /usr/share/nginx/html/index.html >/dev/null
     sudo systemctl start nginx
     sudo systemctl enable nginx
