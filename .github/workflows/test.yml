@@ -1,6 +1,6 @@
-# Workflow to Terratest Infrastructure for each Environment
+# Workflow to Terratest the Terraform Modules
 
-name: Terraform infrastructure w/ Terratest
+name: Terratest VPC & Web Modules
 
 on:
   push:
@@ -17,7 +17,7 @@ env:
 
 jobs:
   tests:
-    name: Terratests
+    name: Terratest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -36,15 +36,6 @@ jobs:
         run: go mod tidy
         working-directory: tests
 
-      - name: Testing Dev Environment
-        run: go test -v dev_test.go
+      - name: Terratesting Modules
+        run: go test -v modules_test.go
         working-directory: tests
-
-      - name: Testing Prod Environment
-        run: go test -v prod_test.go
-        working-directory: tests
-
-      - name: Testing Staging Environment
-        run: go test -v staging_test.go
-        working-directory: tests
-

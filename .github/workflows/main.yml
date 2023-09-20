@@ -5,10 +5,10 @@ name: Terraform Infrastructure Deployment
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
     branches:
-    - main
+      - main
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -33,25 +33,37 @@ jobs:
 
       - name: Run Terraform Init
         run: terraform init
-        working-directory: ./environments/${{ matrix.environment }}
+        working-directory: environments/${{ matrix.environment }}
+
   plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [dev, prod, staging]
     steps:
-        - name: Run Terraform Plan
-          run: terraform plan
-          working-directory: ./environments/${{ matrix.environment }}
+      - name: Run Terraform Plan
+        run: terraform plan
+        working-directory: environments/${{ matrix.environment }}
+
   apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [dev, prod, staging]
     steps:
-        - name: Run Terraform Apply
-          run: terraform apply -auto-approve
-          working-directory: ./environments/${{ matrix.environment }}
+      - name: Run Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: environments/${{ matrix.environment }}
+
   destroy:
     name: Terraform Destroy (optional)
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [dev, prod, staging]
     steps:
-        - name: Run Terraform Destroy
-          run: terraform destroy -auto-approve
-          working-directory: ./environments/${{ matrix.environment }}
+      - name: Run Terraform Destroy
+        run: terraform destroy -auto-approve
+        working-directory: environments/${{ matrix.environment }}
