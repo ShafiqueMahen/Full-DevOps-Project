@@ -1,4 +1,4 @@
-# Workflow to Deploy Terraform Infrastructure for each Environment
+# Workflow to Deploy and Destroy Terraform Infrastructure for each Environment
 
 name: Terraform Infrastructure Deployment
 
@@ -16,12 +16,9 @@ env:
   AWS_REGION: eu-west-2
 
 jobs:
-  deploy-and-destroy:
-    name: Deploy and Destroy Infrastructure
+  deploy-and-destroy-dev:
+    name: Deploy and Destroy Dev Environment
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [dev, prod, staging]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -31,14 +28,62 @@ jobs:
         with:
           terraform_version: latest
 
-      - name: Run Terraform Init
+      - name: Run Terraform Init (Dev)
         run: terraform init
-        working-directory: ./environments/${{ matrix.environment }}
+        working-directory: ./environments/dev
 
-      - name: Run Terraform Apply
+      - name: Run Terraform Apply (Dev)
         run: terraform apply -auto-approve
-        working-directory: ./environments/${{ matrix.environment }}
+        working-directory: ./environments/dev
 
-      - name: Run Terraform Destroy
+      - name: Run Terraform Destroy (Dev)
         run: terraform destroy -auto-approve
-        working-directory: ./environments/${{ matrix.environment }}
+        working-directory: ./environments/dev
+
+  deploy-and-destroy-prod:
+    name: Deploy and Destroy Prod Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: latest
+
+      - name: Run Terraform Init (Prod)
+        run: terraform init
+        working-directory: ./environments/prod
+
+      - name: Run Terraform Apply (Prod)
+        run: terraform apply -auto-approve
+        working-directory: ./environments/prod
+
+      - name: Run Terraform Destroy (Prod)
+        run: terraform destroy -auto-approve
+        working-directory: ./environments/prod
+
+  deploy-and-destroy-staging:
+    name: Deploy and Destroy Staging Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: latest
+
+      - name: Run Terraform Init (Staging)
+        run: terraform init
+        working-directory: ./environments/staging
+
+      - name: Run Terraform Apply (Staging)
+        run: terraform apply -auto-approve
+        working-directory: ./environments/staging
+
+      - name: Run Terraform Destroy (Staging)
+        run: terraform destroy -auto-approve
+        working-directory: ./environments/staging
