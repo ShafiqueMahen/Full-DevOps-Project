@@ -42,6 +42,14 @@ jobs:
       matrix:
         environment: [dev, prod, staging]
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: latest
+
       - name: Run Terraform Plan
         run: terraform plan
         working-directory: environments/${{ matrix.environment }}
@@ -53,6 +61,14 @@ jobs:
       matrix:
         environment: [dev, prod, staging]
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: latest
+
       - name: Run Terraform Apply
         run: terraform apply -auto-approve
         working-directory: environments/${{ matrix.environment }}
@@ -64,6 +80,14 @@ jobs:
       matrix:
         environment: [dev, prod, staging]
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: latest
+          
       - name: Run Terraform Destroy
         run: terraform destroy -auto-approve
         working-directory: environments/${{ matrix.environment }}
