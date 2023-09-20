@@ -44,5 +44,5 @@ variable "instance_type" {
 
 variable "key_name" {
     description = "SSH Key Name"
-    default = "TF-nginx-ec2-key"
+    default = "TF-nginx-ec2-key-dev"
 }
