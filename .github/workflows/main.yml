@@ -1,6 +1,6 @@
-# Workflow to Terratest Infrastructure for each Environment
+# Workflow to Deploy Terraform Infrastructure for each Environment
 
-name: Terraform infrastructure w/ Terratest
+name: Terraform Infrastructure Deployment
 
 on:
   push:
@@ -16,35 +16,42 @@ env:
   AWS_REGION: eu-west-2
 
 jobs:
-  terraform:
-    name: Terratests
+  init:
+    name: Terraform Init
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [dev, prod, staging]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
         with:
-          go-version: 1.21.1
+          terraform_version: latest
 
-      - name: Initialize Go Modules
-        run: go mod init test
-        working-directory: tests
-
-      - name: Install Dependencies
-        run: go mod tidy
-        working-directory: tests
-
-      - name: Testing Dev Environment
-        run: go test -v dev_test.go
-        working-directory: tests
-
-      - name: Testing Prod Environment
-        run: go test -v prod_test.go
-        working-directory: tests
-
-      - name: Testing Staging Environment
-        run: go test -v staging_test.go
-        working-directory: tests
-
+      - name: Run Terraform Init
+        run: terraform init
+        working-directory: ./environments/${{ matrix.environment }}
+  plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    steps:
+        - name: Run Terraform Plan
+          run: terraform plan
+          working-directory: ./environments/${{ matrix.environment }}
+  apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    steps:
+        - name: Run Terraform Apply
+          run: terraform apply -auto-approve
+          working-directory: ./environments/${{ matrix.environment }}
+  destroy:
+    name: Terraform Destroy (optional)
+    runs-on: ubuntu-latest
+    steps:
+        - name: Run Terraform Destroy
+          run: terraform destroy -auto-approve
+          working-directory: ./environments/${{ matrix.environment }}
